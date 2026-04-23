@@ -1,12 +1,13 @@
 ﻿'use client';
 // app/forgot-password/sent/page.js
-// Step 2 — shown after the reset email has been sent.
-// Displays the email address, lets user resend, and has a countdown.
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';export default function ForgotPasswordSentPage() {
+import { supabase } from '@/lib/supabaseClient';
+
+const RESEND_COOLDOWN = 60;
+
+function ForgotPasswordSentContent() {
   const params  = useSearchParams();
   const email   = params.get('email') || '';
 
@@ -14,7 +15,6 @@ import { supabase } from '@/lib/supabaseClient';export default function ForgotPa
   const [resending, setResending] = useState(false);
   const [resendMsg, setResendMsg] = useState('');
 
-  // Countdown timer
   useEffect(() => {
     if (cooldown <= 0) return;
     const t = setTimeout(() => setCooldown(c => c - 1), 1000);
@@ -67,7 +67,6 @@ import { supabase } from '@/lib/supabaseClient';export default function ForgotPa
         .fps-body { padding:44px 38px 42px; }
         @media(max-width:480px){ .fps-body{padding:30px 22px 32px;} }
 
-        /* Icon ring */
         .fps-icon-wrap {
           position:relative; width:88px; height:88px; margin:0 auto 22px;
         }
@@ -195,5 +194,13 @@ import { supabase } from '@/lib/supabaseClient';export default function ForgotPa
         </div>
       </div>
     </>
+  );
+}
+
+export default function ForgotPasswordSentPage() {
+  return (
+    <Suspense>
+      <ForgotPasswordSentContent />
+    </Suspense>
   );
 }
