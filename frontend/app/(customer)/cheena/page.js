@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import MapHolder from '@/components/MapHolder';
+import dynamic from 'next/dynamic';
+
+const MapHolder = dynamic(() => import('@/components/MapHolder'), { ssr: false });
 
 const CHEENA_TYPES = [
   {
