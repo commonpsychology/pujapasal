@@ -3,8 +3,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import MapHolder from '@/components/MapHolder';
+import dynamic from 'next/dynamic';
 import Footer from '@/components/Footer';
+
+const MapHolder = dynamic(() => import('@/components/MapHolder'), { ssr: false });
 
 const STATS = [
   { value: '5000+', label: 'Happy Devotees',   emoji: '🙏' },
